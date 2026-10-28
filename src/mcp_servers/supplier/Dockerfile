@@ -2,7 +2,16 @@ FROM python:3.11-slim AS builder
 
 ENV UV_SYSTEM_PYTHON=1
 RUN python -m pip install --no-cache-dir uv
-RUN uv pip install --system mcp pydantic structlog
+RUN uv pip install --system \
+    azure-identity==1.27.0 \
+    azure-keyvault-secrets==4.11.3 \
+    anyio==4.15.1 \
+    certifi==2026.10.23 \
+    cryptography==50.0.2 \
+    mcp==1.30.0 \
+    PyJWT==2.15.1 \
+    pydantic \
+    structlog
 
 FROM python:3.11-slim AS runtime
 

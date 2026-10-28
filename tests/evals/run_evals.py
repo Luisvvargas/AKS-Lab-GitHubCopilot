@@ -59,6 +59,7 @@ async def _run_one(client: httpx.AsyncClient, scenario: EvalScenario) -> EvalRes
     response = await client.post(
         "/plan",
         json={"goal": scenario.goal, "sku": scenario.sku, "store_id": scenario.store_id},
+        timeout=httpx.Timeout(scenario.max_latency_s + 30),
     )
     latency_s = time.perf_counter() - started
     response.raise_for_status()
@@ -89,8 +90,15 @@ async def run() -> int:
     endpoint = os.environ.get("ZAVA_ENDPOINT", "http://localhost:8000").rstrip("/")
     scenarios = _load_scenarios()
     failures = 0
-    timeout = httpx.Timeout(240.0)
+    timeout = httpx.Timeout(max(scenario.max_latency_s for scenario in scenarios) + 30)
     async with httpx.AsyncClient(base_url=endpoint, timeout=timeout) as client:
+        readiness = await client.get("/readyz")
+        readiness.raise_for_status()
+        warmup = await client.post(
+            "/plan",
+            json={"goal": "Warm up the plan endpoint.", "sku": "ZS-1042", "store_id": "store-101"},
+        )
+        warmup.raise_for_status()
         for scenario in scenarios:
             result = await _run_one(client, scenario)
             status = "PASS" if result.passed else "FAIL"

@@ -1,0 +1,274 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Quality checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Sync dependencies
+        run: uv sync --frozen --all-groups
+
+      - name: Check
+        run: uv run --frozen poe check
+
+      - name: Audit
+        run: uv run --frozen poe audit
+
+  image-security:
+    name: Build and scan images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        id: image-tag
+        run: echo "git_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build base and service images
+        env:
+          GIT_SHA: ${{ steps.image-tag.outputs.git_sha }}
+        run: |
+          set -euo pipefail
+          GITHUB_TOKEN=build-only-placeholder GIT_SHA="$GIT_SHA" \
+            docker compose --profile build build zavashop-base
+          GITHUB_TOKEN=build-only-placeholder GIT_SHA="$GIT_SHA" \
+            docker compose build \
+              inventory-mcp supplier-mcp shipping-mcp pricing-mcp \
+              inventory supplier logistics pricing orchestrator
+
+      - name: Scan base image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop-base:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan inventory MCP image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/inventory-mcp:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan supplier MCP image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/supplier-mcp:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan shipping MCP image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/shipping-mcp:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan pricing MCP image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/pricing-mcp:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan inventory agent image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/inventory:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan supplier agent image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/supplier:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan logistics agent image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/logistics:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan pricing agent image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/pricing:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+      - name: Scan orchestrator image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: zavashop/orchestrator:${{ steps.image-tag.outputs.git_sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+
+  evals:
+    name: Labeled pull request evals
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(github.event.pull_request.labels.*.name, 'run-evals')
+    needs: [check, image-security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Sync dependencies
+        run: uv sync --frozen --all-groups
+
+      - name: Set image tag
+        id: image-tag
+        run: echo "git_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build base and service images
+        env:
+          GIT_SHA: ${{ steps.image-tag.outputs.git_sha }}
+        run: |
+          set -euo pipefail
+          GITHUB_TOKEN=build-only-placeholder GIT_SHA="$GIT_SHA" \
+            docker compose --profile build build zavashop-base
+          GITHUB_TOKEN=build-only-placeholder GIT_SHA="$GIT_SHA" \
+            docker compose build \
+              inventory-mcp supplier-mcp shipping-mcp pricing-mcp \
+              inventory supplier logistics pricing orchestrator
+
+      - name: Start fleet and run golden evals
+        env:
+          GIT_SHA: ${{ steps.image-tag.outputs.git_sha }}
+          GITHUB_TOKEN: ${{ secrets.COPILOT_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$GITHUB_TOKEN" ]]; then
+            echo 'COPILOT_TOKEN is required for labeled evals.' >&2
+            exit 1
+          fi
+
+          for service in \
+            inventory-mcp supplier-mcp shipping-mcp pricing-mcp \
+            inventory supplier logistics pricing orchestrator; do
+            docker compose up --detach --no-deps "$service"
+          done
+
+          services=(
+            inventory-mcp supplier-mcp shipping-mcp pricing-mcp
+            inventory supplier logistics pricing orchestrator
+          )
+          deadline=$((SECONDS + 600))
+          all_healthy=false
+          while (( SECONDS < deadline )); do
+            not_ready=()
+            for service in "${services[@]}"; do
+              container_id=$(docker compose ps --quiet "$service")
+              if [[ -z "$container_id" ]]; then
+                not_ready+=("$service:missing")
+                continue
+              fi
+
+              health=$(docker inspect \
+                --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}' \
+                "$container_id" 2>/dev/null || true)
+              if [[ "$health" != healthy ]]; then
+                not_ready+=("$service:${health:-unavailable}")
+              fi
+            done
+
+            if (( ${#not_ready[@]} == 0 )); then
+              all_healthy=true
+              break
+            fi
+            printf 'Waiting for healthy services: %s\n' "${not_ready[*]}"
+            remaining=$((deadline - SECONDS))
+            sleep_for=5
+            if (( remaining < sleep_for )); then
+              sleep_for=$remaining
+            fi
+            if (( sleep_for > 0 )); then
+              sleep "$sleep_for"
+            fi
+          done
+
+          if [[ "$all_healthy" != true ]]; then
+            echo 'The Compose fleet did not become healthy within 600 seconds.' >&2
+            exit 1
+          fi
+
+          ZAVA_ENDPOINT=http://localhost:8000 uv run --frozen poe evals 2>&1 | tee eval-output.log
+
+      - name: Capture Compose diagnostics and clean up
+        if: always()
+        env:
+          GIT_SHA: ${{ steps.image-tag.outputs.git_sha }}
+          GITHUB_TOKEN: ${{ secrets.COPILOT_TOKEN }}
+        run: |
+          set -euo pipefail
+          docker compose ps --all > compose-ps.log 2>&1 || true
+          docker compose logs --no-color --timestamps 2>&1 | python -c '
+          import os
+          import sys
+
+          token = os.environ.get("GITHUB_TOKEN", "")
+          for line in sys.stdin:
+              sys.stdout.write(line.replace(token, "[REDACTED]") if token else line)
+          ' > compose-logs.log || true
+          docker compose down --volumes --remove-orphans
+
+      - name: Upload eval output and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-04-evals-${{ steps.image-tag.outputs.git_sha }}
+          path: |
+            eval-output.log
+            compose-ps.log
+            compose-logs.log
+          if-no-files-found: warn
+          retention-days: 7
