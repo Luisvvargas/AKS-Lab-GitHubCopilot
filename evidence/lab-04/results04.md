@@ -61,10 +61,6 @@ were performed using local Copilot in VS Code.
 **The remote Coding Agent PR requirement remains incomplete.**
 Local Copilot work is not presented as fulfilling that requirement.
 
-### Remaining submission work
-- Integrate the final changes through a regular pull request.
-- Verify CI on `main`.
-
 ### Evidence
 ![Final quality checks: 46 tests, 93.56% coverage](../../evidence/lab-04/check04.png)
 ![Dependency and source audit passed](../../evidence/lab-04/audit04.png)
@@ -73,3 +69,15 @@ Local Copilot work is not presented as fulfilling that requirement.
 
 - [Final eval output](../../evidence/lab-04/evals-final-validation.txt)
 - [Sanitized eval diagnostics](../../evidence/lab-04/evals-final-validation.json)
+
+### Integration into main
+[Pull request #2](https://github.com/Luisvvargas/AKS-Lab-GitHubCopilot/pull/2)
+was merged into `main` as commit `d3ad1ce`.
+Quality and image-security checks passed on the PR.
+The labeled eval jobs were skipped; the five-scenario passing result
+documented above comes from the local live run.
+![PR merged into main](../../evidence/lab-04/pr04.png)
+
+### CI on main
+Quality and image-security checks passed on `main` after the merge.
+![CI passed on main](../../evidence/lab-04/ci-main.png)

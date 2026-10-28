@@ -287,3 +287,15 @@ Local Copilot work is not presented as fulfilling that requirement.
 
 - [Final eval output](../../PROJECT EVIDENCE/lab-04/evals-final-validation.txt)
 - [Sanitized eval diagnostics](../../PROJECT EVIDENCE/lab-04/evals-final-validation.json)
+
+### Integration into main
+[Pull request #2](https://github.com/Luisvvargas/AKS-Lab-GitHubCopilot/pull/2)
+was merged into `main` as commit `d3ad1ce`.
+Quality and image-security checks passed on the PR.
+The labeled eval jobs were skipped; the five-scenario passing result
+documented above comes from the local live run.
+![PR merged into main](../../evidence/lab-04/pr04.png)
+
+### CI on main
+Quality and image-security checks passed on `main` after the merge.
+![CI passed on main](../../evidence/lab-04/ci-main04.png)
