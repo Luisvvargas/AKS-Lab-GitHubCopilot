@@ -24,7 +24,10 @@ deploy_app() {
   local name="$1"
   local image_name="$2"
   local target_port="$3"
-  local mcp_json="${4:-{}}"
+  local mcp_json="${4:-}"
+  if [[ -z "$mcp_json" ]]; then
+    mcp_json='{}'
+  fi
   local image="${ACR_LOGIN_SERVER}/zavashop/${image_name}:${GIT_SHA}"
 
   az deployment group create \
