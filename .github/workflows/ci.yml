@@ -60,7 +60,7 @@ jobs:
               inventory supplier logistics pricing orchestrator
 
       - name: Scan base image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop-base:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -68,7 +68,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan inventory MCP image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/inventory-mcp:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -76,7 +76,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan supplier MCP image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/supplier-mcp:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -84,7 +84,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan shipping MCP image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/shipping-mcp:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -92,7 +92,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan pricing MCP image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/pricing-mcp:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -100,7 +100,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan inventory agent image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/inventory:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -108,7 +108,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan supplier agent image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/supplier:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -116,7 +116,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan logistics agent image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/logistics:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -124,7 +124,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan pricing agent image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/pricing:${{ steps.image-tag.outputs.git_sha }}
           format: table
@@ -132,7 +132,7 @@ jobs:
           exit-code: "1"
 
       - name: Scan orchestrator image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: zavashop/orchestrator:${{ steps.image-tag.outputs.git_sha }}
           format: table
