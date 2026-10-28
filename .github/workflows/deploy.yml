@@ -125,7 +125,9 @@ jobs:
         shell: bash
         run: |
           source .env.fqdns
+          sudo az aks install-cli
           az aks get-credentials -g "$RG" -n "$AKS" --overwrite-existing
+          kubelogin convert-kubeconfig -l azurecli
           kubectl create namespace zavashop --dry-run=client -o yaml | kubectl apply -f -
           helm upgrade --install zavashop infra/aks/helm/zavashop \
             -n zavashop \
