@@ -9,6 +9,15 @@ FROM python:3.13-slim AS runtime
 
 LABEL org.opencontainers.image.source="https://github.com/kinfey/AKS-Lab-GitHubCopilot"
 
+# Installer tooling is used only in the builder; runtime dependencies are in the application venv.
+RUN rm -rf \
+    /usr/local/lib/python3.13/site-packages/pip \
+    /usr/local/lib/python3.13/site-packages/pip-*.dist-info \
+    /usr/local/lib/python3.13/ensurepip \
+    /usr/local/bin/pip \
+    /usr/local/bin/pip3 \
+    /usr/local/bin/pip3.13
+
 ENV PATH="/app/.venv/bin:/usr/local/bin:${PATH}" \
     HOME=/home/zava \
     XDG_CACHE_HOME=/home/zava/.cache \

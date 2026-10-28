@@ -26,6 +26,22 @@ WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY src /app/src
 
+# Installer tooling is unused at runtime; preserve the MCP dependencies in site-packages.
+RUN rm -rf \
+    /usr/local/lib/python3.11/site-packages/pip \
+    /usr/local/lib/python3.11/site-packages/pip-*.dist-info \
+    /usr/local/lib/python3.11/site-packages/setuptools \
+    /usr/local/lib/python3.11/site-packages/setuptools-*.dist-info \
+    /usr/local/lib/python3.11/site-packages/wheel \
+    /usr/local/lib/python3.11/site-packages/wheel-*.dist-info \
+    /usr/local/lib/python3.11/ensurepip \
+    /usr/local/bin/pip \
+    /usr/local/bin/pip3 \
+    /usr/local/bin/pip3.11 \
+    /usr/local/bin/easy_install \
+    /usr/local/bin/easy_install-* \
+    /usr/local/bin/wheel
+
 USER zava
 EXPOSE 8080
 
