@@ -1,0 +1,141 @@
+{
+  "total": 5,
+  "failures": 0,
+  "scenarios": [
+    {
+      "id": "S1-stockout-zs1042-store101",
+      "passed": true,
+      "latency_s": 37.69958541600499,
+      "missing_mentions": [],
+      "notes": [
+        "expected specialists: inventory,supplier,logistics,pricing"
+      ],
+      "response_body": {
+        "sku": "ZS-1042",
+        "store_id": "store-101",
+        "stock_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"stock_view\":\"Target store store-101 has 6 on-hand and 4 reserved, leaving 2 sellable units against a reorder point of 24; estimated stockout in 2 days.\",\"risk_level\":\"critical\",\"nearby_locations\":[{\"location_id\":\"store-202\",\"on_hand\":84,\"reserved\":9,\"reorder_point\":30,\"days_until_stockout\":16},{\"location_id\":\"wh-east\",\"on_hand\":420,\"reserved\":65,\"reorder_point\":150,\"days_until_stockout\":30}],\"recommendation\":\"Prioritize a transfer from store-202 and prepare supplier replenishment as backup; store-101 is at critical risk with only 2 sellable units remaining.\"}",
+        "price_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"price_view\":\"Current price $39.99; recommended price $42.79 to capture high demand while protecting scarce stock.\",\"current_price\":39.99,\"recommended_price\":42.79,\"margin_impact\":\"Estimated unit margin increase of $2.80.\",\"rationale\":\"Demand signal is high and stock risk is critical for SKU ZS-1042 at store-101; raising price to $42.79 maximizes revenue and protects inventory while matching the strength of demand.\"}",
+        "po_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_view\":{\"ranked_suppliers\":[{\"supplier_id\":\"sup-northstar\",\"name\":\"Northstar Apparel Manufacturing\",\"available_qty\":900,\"unit_cost\":18.75,\"lead_time_days\":4,\"reliability_score\":0.97,\"fit\":\"best overall balance of availability, reliability, and cost\"},{\"supplier_id\":\"sup-contoso-textiles\",\"name\":\"Contoso Textiles Direct\",\"available_qty\":500,\"unit_cost\":17.95,\"lead_time_days\":6,\"reliability_score\":0.91,\"fit\":\"lower cost but slower and slightly less reliable\"},{\"supplier_id\":\"sup-fabrikam-rapid\",\"name\":\"Fabrikam Rapid Replenishment\",\"available_qty\":240,\"unit_cost\":20.1,\"lead_time_days\":2,\"reliability_score\":0.88,\"fit\":\"fastest lead time but limited availability and lower reliability\"}],\"selection_criteria\":[\"availability\",\"lead_time\",\"reliability\",\"cost\"],\"best_fit_reason\":\"Northstar offers the strongest overall combination of 900 units available, a 4-day lead time, 0.97 reliability, and a reasonable unit cost for a critical stock recovery.\"},\"po_view\":{\"supplier_id\":\"sup-northstar\",\"quantity\":22,\"estimated_total\":412.5,\"eta_days\":4,\"status\":\"draft\",\"note\":\"Order quantity is based on store-101's sellable stock of 2 units against a reorder point of 24; the PO targets recovery above the reorder threshold before the 2-day stockout risk.\"},\"recommended_supplier\":\"sup-northstar\",\"next_action\":\"Place the draft PO with Northstar for 22 units to recover store-101 above its reorder point before the critical 2-day stockout window closes; monitor inbound ETA and replenish only as needed.\",\"purchase_order\":{\"po_id\":\"PO-62C5DC1C03\",\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_id\":\"sup-northstar\",\"quantity\":22,\"estimated_total\":412.5,\"eta_days\":4,\"status\":\"draft\"}}",
+        "shipping_view": "{\"po_id\":\"PO-62C5DC1C03\",\"destination_store_id\":\"store-101\",\"shipping_view\":\"ETA 1 day; cost $376.50; carrier Fabrikam RapidShip; service same-day-expedite\",\"carrier\":\"Fabrikam RapidShip\",\"service_level\":\"same-day-expedite\",\"recommendation\":\"Use Fabrikam RapidShip same-day-expedite for PO PO-62C5DC1C03; ETA 1 days to store-101 at estimated cost $376.50.\"}",
+        "summary": "Completed recovery plan for ZS-1042 at store-101.",
+        "next_actions": [
+          "Review the actual draft purchase order before approval.",
+          "Review the shipment quote before booking.",
+          "Review inventory risk and available nearby stock.",
+          "Review the price recommendation before applying it."
+        ]
+      },
+      "recorded_calls": null,
+      "status_code": 200,
+      "errors": []
+    },
+    {
+      "id": "S2-demand-spike-zs1042",
+      "passed": true,
+      "latency_s": 29.608219749992713,
+      "missing_mentions": [],
+      "notes": [
+        "expected specialists: inventory,supplier,logistics,pricing"
+      ],
+      "response_body": {
+        "sku": "ZS-1042",
+        "store_id": "store-101",
+        "stock_view": "{\n  \"sku\": \"ZS-1042\",\n  \"store_id\": \"store-101\",\n  \"stock_view\": \"store-101 has 6 on hand, 4 reserved, reorder point 24, and only 2 sellable units left with 2 days until stockout.\",\n  \"risk_level\": \"critical\",\n  \"nearby_locations\": [\n    {\n      \"location_id\": \"store-202\",\n      \"on_hand\": 84,\n      \"reserved\": 9,\n      \"reorder_point\": 30,\n      \"days_until_stockout\": 16\n    },\n    {\n      \"location_id\": \"wh-east\",\n      \"on_hand\": 420,\n      \"reserved\": 65,\n      \"reorder_point\": 150,\n      \"days_until_stockout\": 30\n    }\n  ],\n  \"recommendation\": \"Prioritize an emergency transfer from store-202 and prepare supplier replenishment as backup.\"\n}",
+        "price_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"price_view\":\"recommended\",\"current_price\":39.99,\"recommended_price\":42.79,\"margin_impact\":\"Estimated unit margin increase of $2.80.\",\"rationale\":\"For seasonal apparel SKU ZS-1042 at store-101, protect scarce inventory and margin; recommend $42.79 based on demand signal 'high' and stock risk 'critical'.\"}",
+        "po_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_view\":\"Northstar Apparel Manufacturing (sup-northstar) offers the best replenishment fit for ZS-1042: 900 units available, $18.75/unit, 4-day lead time, and 97% reliability; this balances availability, speed, and service quality better than Contoso Textiles Direct and Fabrikam Rapid Replenishment.\",\"po_view\":\"Draft purchase order PO-B24AC12767 for 900 units of ZS-1042 at store-101 from sup-northstar; estimated total $16,875.00, ETA 4 days, status draft.\",\"recommended_supplier\":\"sup-northstar\",\"next_action\":\"Approve the draft PO and execute the emergency transfer from store-202 as recommended; supplier replenishment is the primary recovery backup while store-101 remains at critical stock risk.\",\"purchase_order\":{\"po_id\":\"PO-B24AC12767\",\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_id\":\"sup-northstar\",\"quantity\":900,\"estimated_total\":16875.0,\"eta_days\":4,\"status\":\"draft\"}}",
+        "shipping_view": "{\"po_id\":\"PO-B24AC12767\",\"destination_store_id\":\"store-101\",\"shipping_view\":\"PO-B24AC12767 to store-101: 900 units, ETA 1 day, cost $1,035.00, recommended carrier Fabrikam RapidShip same-day-expedite.\",\"carrier\":\"Fabrikam RapidShip\",\"service_level\":\"same-day-expedite\",\"recommendation\":\"Use Fabrikam RapidShip same-day-expedite for PO PO-B24AC12767; ETA 1 day to store-101 at estimated cost $1035.00.\"}",
+        "summary": "Completed recovery plan for ZS-1042 at store-101.",
+        "next_actions": [
+          "Review the actual draft purchase order before approval.",
+          "Review the shipment quote before booking.",
+          "Review inventory risk and available nearby stock.",
+          "Review the price recommendation before applying it."
+        ]
+      },
+      "recorded_calls": null,
+      "status_code": 200,
+      "errors": []
+    },
+    {
+      "id": "S3-supplier-delay-zs1042",
+      "passed": true,
+      "latency_s": 36.574213208048604,
+      "missing_mentions": [],
+      "notes": [
+        "expected specialists: inventory,supplier,logistics"
+      ],
+      "response_body": {
+        "sku": "ZS-1042",
+        "store_id": "store-101",
+        "stock_view": "{\n  \"sku\": \"ZS-1042\",\n  \"store_id\": \"store-101\",\n  \"stock_view\": {\n    \"location_id\": \"store-101\",\n    \"on_hand\": 6,\n    \"reserved\": 4,\n    \"reorder_point\": 24,\n    \"days_until_stockout\": 2,\n    \"sellable_units\": 2\n  },\n  \"risk_level\": \"critical\",\n  \"nearby_locations\": [\n    {\n      \"location_id\": \"store-202\",\n      \"on_hand\": 84,\n      \"reserved\": 9,\n      \"reorder_point\": 30,\n      \"days_until_stockout\": 16\n    },\n    {\n      \"location_id\": \"wh-east\",\n      \"on_hand\": 420,\n      \"reserved\": 65,\n      \"reorder_point\": 150,\n      \"days_until_stockout\": 30\n    }\n  ],\n  \"recommendation\": \"store-101 has only 2 sellable units of ZS-1042, so stockout risk is critical. Prioritize an immediate transfer from store-202 and prepare supplier replenishment as backup; warehouse stock at wh-east is also available as a secondary source.\"\n}",
+        "price_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"price_view\":\"current_vs_recommended\",\"current_price\":39.99,\"recommended_price\":42.79,\"margin_impact\":\"Estimated unit margin increase of $2.80.\",\"rationale\":\"For SKU ZS-1042 at store-101, the confirmed high demand signal and critical stock risk support a price increase from $39.99 to $42.79. This recommendation is based on the verified pricing inputs; no additional Northstar/Fabrikam lead-time or expedited-shipping facts were included in the verified pricing context, so they were not used in the price decision.\"}",
+        "po_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_view\":{\"seeded_candidates\":[{\"supplier_id\":\"sup-northstar\",\"name\":\"Northstar Apparel Manufacturing\",\"lead_time_days\":4,\"reliability_score\":0.97,\"unit_cost\":18.75,\"available_qty\":900},{\"supplier_id\":\"sup-fabrikam-rapid\",\"name\":\"Fabrikam Rapid Replenishment\",\"lead_time_days\":2,\"reliability_score\":0.88,\"unit_cost\":20.1,\"available_qty\":240}],\"decision\":\"Fabrikam's 2-day lead time is the available expedited option and is faster than Northstar's 4-day lead time; Northstar remains lower cost and more reliable but slower.\"},\"po_view\":{\"po_id\":\"PO-49879376FC\",\"supplier_id\":\"sup-fabrikam-rapid\",\"quantity\":22,\"estimated_total\":442.2,\"eta_days\":2,\"status\":\"draft\"},\"recommended_supplier\":\"sup-fabrikam-rapid\",\"next_action\":\"Approve the Fabrikam draft PO to address the critical stock risk at store-101; keep Northstar as a backup if lead time or availability changes.\",\"purchase_order\":{\"po_id\":\"PO-49879376FC\",\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_id\":\"sup-fabrikam-rapid\",\"quantity\":22,\"estimated_total\":442.2,\"eta_days\":2,\"status\":\"draft\"}}",
+        "shipping_view": "{\"po_id\":\"PO-49879376FC\",\"destination_store_id\":\"store-101\",\"shipping_view\":\"Fabrikam RapidShip same-day-expedite; ETA 1 day; cost $376.50\",\"carrier\":\"Fabrikam RapidShip\",\"service_level\":\"same-day-expedite\",\"recommendation\":\"Use Fabrikam RapidShip same-day-expedite for PO PO-49879376FC; ETA 1 day to store-101 at estimated cost $376.50.\"}",
+        "summary": "Completed recovery plan for ZS-1042 at store-101.",
+        "next_actions": [
+          "Review the actual draft purchase order before approval.",
+          "Review the shipment quote before booking.",
+          "Review inventory risk and available nearby stock.",
+          "Review the price recommendation before applying it."
+        ]
+      },
+      "recorded_calls": null,
+      "status_code": 200,
+      "errors": []
+    },
+    {
+      "id": "S4-price-war-zs1042",
+      "passed": true,
+      "latency_s": 33.717082540970296,
+      "missing_mentions": [],
+      "notes": [
+        "expected specialists: inventory,pricing,supplier"
+      ],
+      "response_body": {
+        "sku": "ZS-1042",
+        "store_id": "store-101",
+        "stock_view": "{\n  \"sku\": \"ZS-1042\",\n  \"store_id\": \"store-101\",\n  \"stock_view\": \"store-101 has 6 on-hand and 4 reserved, leaving 2 sellable units against a reorder point of 24; days until stockout is 2.\",\n  \"risk_level\": \"critical\",\n  \"nearby_locations\": [\n    {\n      \"location_id\": \"store-202\",\n      \"on_hand\": 84,\n      \"reserved\": 9,\n      \"reorder_point\": 30,\n      \"days_until_stockout\": 16\n    },\n    {\n      \"location_id\": \"wh-east\",\n      \"on_hand\": 420,\n      \"reserved\": 65,\n      \"reorder_point\": 150,\n      \"days_until_stockout\": 30\n    }\n  ],\n  \"recommendation\": \"Prioritize a transfer from store-202 and draft supplier replenishment as backup.\"\n}",
+        "price_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"price_view\":\"Verified pricing recommendation\",\"current_price\":39.99,\"recommended_price\":42.79,\"margin_impact\":\"Estimated unit margin increase of $2.80.\",\"rationale\":\"For seasonal apparel SKU ZS-1042 at store-101, protect scarce inventory and margin; recommend $42.79 based on demand signal 'high' and stock risk 'critical'.\"}",
+        "po_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_view\":\"Best overall supplier is sup-northstar (Northstar Apparel Manufacturing): 900 units available, $18.75/unit, 4-day lead time, 0.97 reliability. Alternatives: sup-contoso-textiles has 500 units at $17.95/unit with 6-day lead and 0.91 reliability; sup-fabrikam-rapid has 240 units at $20.10/unit with 2-day lead and 0.88 reliability.\",\"po_view\":\"PO-B24AC12767 for ZS-1042 at store-101 from sup-northstar: quantity 900, estimated_total 16875.0, eta_days 4, status draft.\",\"recommended_supplier\":\"sup-northstar\",\"next_action\":\"Prioritize the transfer from store-202 and keep this Northstar PO as backup replenishment; monitor sell-through against the reorder point while awaiting the 4-day ETA.\",\"purchase_order\":{\"po_id\":\"PO-B24AC12767\",\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_id\":\"sup-northstar\",\"quantity\":900,\"estimated_total\":16875.0,\"eta_days\":4,\"status\":\"draft\"}}",
+        "shipping_view": "{\"po_id\":\"PO-B24AC12767\",\"destination_store_id\":\"store-101\",\"shipping_view\":\"Quote for 900 units to store-101: Fabrikam RapidShip same-day-expedite, ETA 1 day, estimated cost $1,035.00.\",\"carrier\":\"Fabrikam RapidShip\",\"service_level\":\"same-day-expedite\",\"recommendation\":\"Use Fabrikam RapidShip same-day-expedite for PO-B24AC12767; ETA 1 day to store-101 at estimated cost $1,035.00. Handoff to receiving: confirm dock slot and arrival window.\"}",
+        "summary": "Completed recovery plan for ZS-1042 at store-101.",
+        "next_actions": [
+          "Review the actual draft purchase order before approval.",
+          "Review the shipment quote before booking.",
+          "Review inventory risk and available nearby stock.",
+          "Review the price recommendation before applying it."
+        ]
+      },
+      "recorded_calls": null,
+      "status_code": 200,
+      "errors": []
+    },
+    {
+      "id": "S5-seasonal-promotion-zs1042",
+      "passed": true,
+      "latency_s": 35.19241570797749,
+      "missing_mentions": [],
+      "notes": [
+        "expected specialists: inventory,pricing,supplier,logistics"
+      ],
+      "response_body": {
+        "sku": "ZS-1042",
+        "store_id": "store-101",
+        "stock_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"stock_view\":\"Target store store-101 has 6 on-hand, 4 reserved, reorder point 24, and only 2 sellable units left; days until stockout is 2.\",\"risk_level\":\"critical\",\"nearby_locations\":[{\"location_id\":\"store-202\",\"on_hand\":84,\"reserved\":9,\"reorder_point\":30,\"days_until_stockout\":16},{\"location_id\":\"wh-east\",\"on_hand\":420,\"reserved\":65,\"reorder_point\":150,\"days_until_stockout\":30}],\"recommendation\":\"Prioritize a transfer from store-202 and draft supplier replenishment as backup; store-101 is at critical stock risk.\"}",
+        "price_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"price_view\":\"pricing recommendation\",\"current_price\":39.99,\"recommended_price\":42.79,\"margin_impact\":\"Estimated unit margin increase of $2.80.\",\"rationale\":\"For seasonal apparel SKU ZS-1042 at store-101, protect scarce inventory and margin; recommend $42.79 based on demand signal 'high' and stock risk 'critical'.\"}",
+        "po_view": "{\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_view\":\"Viable suppliers for ZS-1042: Northstar Apparel Manufacturing (sup-northstar) has 900 units available at $18.75/unit with a 4-day lead time and 0.97 reliability; Contoso Textiles Direct (sup-contoso-textiles) has 500 units at $17.95/unit with a 6-day lead time and 0.91 reliability; Fabrikam Rapid Replenishment (sup-fabrikam-rapid) has 240 units at $20.10/unit with a 2-day lead time and 0.88 reliability. Northstar is the best fit by availability, reliability, and acceptable lead time.\",\"po_view\":\"Draft PO to Northstar Apparel Manufacturing for 900 units at store-101; estimated total $16,875.00; ETA 4 days; status draft.\",\"recommended_supplier\":\"sup-northstar\",\"next_action\":\"Approve and send draft PO PO-B24AC12767 to Northstar Apparel Manufacturing; maintain transfer from store-202 as backup while store-101 remains in critical stock risk.\",\"purchase_order\":{\"po_id\":\"PO-B24AC12767\",\"sku\":\"ZS-1042\",\"store_id\":\"store-101\",\"supplier_id\":\"sup-northstar\",\"quantity\":900,\"estimated_total\":16875.0,\"eta_days\":4,\"status\":\"draft\"}}",
+        "shipping_view": "{\"po_id\":\"PO-B24AC12767\",\"destination_store_id\":\"store-101\",\"shipping_view\":\"Validated shipment quote for 900 units to store-101: Fabrikam RapidShip, same-day-expedite, ETA 1 day, cost $1035.00.\",\"carrier\":\"Fabrikam RapidShip\",\"service_level\":\"same-day-expedite\",\"recommendation\":\"Use Fabrikam RapidShip same-day-expedite; ETA 1 day to store-101 at estimated cost $1035.00. Coordinate pick-up and receiving with store operations immediately.\"}",
+        "summary": "Completed recovery plan for ZS-1042 at store-101.",
+        "next_actions": [
+          "Review the actual draft purchase order before approval.",
+          "Review the shipment quote before booking.",
+          "Review inventory risk and available nearby stock.",
+          "Review the price recommendation before applying it."
+        ]
+      },
+      "recorded_calls": null,
+      "status_code": 200,
+      "errors": []
+    }
+  ]
+}
