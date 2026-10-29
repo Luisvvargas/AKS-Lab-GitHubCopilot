@@ -1,4 +1,4 @@
-*THIS IS ALSO IN LAB4 README.md*
+*THIS IS ALSO IN LAB5 README.md*
 ## Lab 05 — Execution Results and Evidence
 ### Azure deployment
 ZavaShop was deployed through GitHub Actions to Azure Container Apps
@@ -22,8 +22,8 @@ scenarios with zero failures.
 | S5 — Seasonal promotion | PASS | 35.19s |
 
 ![Five live evaluations passed](evals05-diagnostics.png)
-- [Evaluation output](../../evidence/lab-05/evals05-diagnostic.txt)
-- [Sanitized diagnostic report](../../evidence/lab-05/evals05-diagnostic.json)
+- [Evaluation output](evals05-diagnostic.txt)
+- [Sanitized diagnostic report](evals05-diagnostic.json)
 
 ### Problems encountered and resolutions
 - **OIDC authentication:** Azure's federated credential did not match
