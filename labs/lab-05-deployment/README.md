@@ -321,9 +321,6 @@ replicas, both Running with zero restarts.
 The public orchestrator successfully responded to `/healthz`,
 `/readyz`, and `/plan`.
 
-### Terminal — Deployed services
-![Eight ACA services and two available AKS replicas](../../evidence/lab-05/services05.png)
-
 ### Live evaluations
 A diagnostic run against the deployed AKS endpoint passed all five
 scenarios with zero failures.
@@ -336,7 +333,7 @@ scenarios with zero failures.
 | S4 — Price war | PASS | 33.72s |
 | S5 — Seasonal promotion | PASS | 35.19s |
 
-![Five live evaluation scenarios passed](../../evidence/lab-05/evals05.png)
+![Five live evaluations passed](../../evidence/lab-05/evals05-diagnostics.png)
 - [Evaluation output](../../evidence/lab-05/evals05-diagnostic.txt)
 - [Sanitized diagnostic report](../../evidence/lab-05/evals05-diagnostic.json)
 
